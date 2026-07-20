@@ -15,7 +15,7 @@ connectDB();
 const app = express();
 
 // CORS Configuration
-const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174"]; // Include .env and common Vite ports
+const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173", "https://singular-pony-c89e20.netlify.app/"]; // Include .env and common Vite ports
 
 const corsOptions = {
   origin: function (origin, callback) {
