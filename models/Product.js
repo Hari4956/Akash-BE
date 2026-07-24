@@ -101,6 +101,14 @@ const productSchema = new mongoose.Schema(
     seoDescription: {
       type: String,
     },
+    redirectUrl: {
+      type: String,
+      trim: true,
+    },
+    label: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

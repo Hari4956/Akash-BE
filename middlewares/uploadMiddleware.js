@@ -7,9 +7,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-console.log("Cloud:", process.env.CLOUDINARY_CLOUD_NAME);
-console.log("Key:", process.env.CLOUDINARY_API_KEY);
-console.log("Secret:", process.env.CLOUDINARY_API_SECRET);
 
 // Use memory storage — multer holds file in buffer, we stream it to Cloudinary
 const memoryStorage = multer.memoryStorage();

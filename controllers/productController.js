@@ -27,6 +27,8 @@ const addProduct = async (req, res) => {
       productStatus,
       seoTitle,
       seoDescription,
+      redirectUrl,
+      label,
     } = req.body;
 
     // Check for required fields
@@ -93,6 +95,8 @@ const addProduct = async (req, res) => {
       productStatus,
       seoTitle,
       seoDescription,
+      redirectUrl,
+      label,
     });
 
     // Populate flags to return full flag details
@@ -123,6 +127,8 @@ const getAllProducts = async (req, res) => {
       search,
       category,
       productStatus,
+      minPrice,
+      maxPrice,
     } = req.query;
 
     // Build the query object
@@ -136,14 +142,27 @@ const getAllProducts = async (req, res) => {
       ];
     }
 
-    // Filter by category
+    // Filter by category (supports comma-separated string or array)
     if (category) {
-      query.category = category;
+      if (typeof category === "string" && category.includes(",")) {
+        query.category = { $in: category.split(",").map((c) => c.trim()) };
+      } else if (Array.isArray(category)) {
+        query.category = { $in: category };
+      } else {
+        query.category = category;
+      }
     }
 
     // Filter by productStatus
     if (productStatus) {
       query.productStatus = productStatus;
+    }
+
+    // Filter by price range
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
     }
 
     // Pagination calculations
@@ -238,6 +257,8 @@ const updateProduct = async (req, res) => {
       productStatus,
       seoTitle,
       seoDescription,
+      redirectUrl,
+      label,
     } = req.body;
 
     const product = await Product.findById(id);
@@ -271,6 +292,8 @@ const updateProduct = async (req, res) => {
     if (productStatus !== undefined) product.productStatus = productStatus;
     if (seoTitle !== undefined) product.seoTitle = seoTitle;
     if (seoDescription !== undefined) product.seoDescription = seoDescription;
+    if (redirectUrl !== undefined) product.redirectUrl = redirectUrl;
+    if (label !== undefined) product.label = label;
 
     // Handle file replacements
     if (req.files) {
